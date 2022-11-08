@@ -40,42 +40,60 @@ namespace Haley.Utils {
 
             if (imgSourceDics == null || imgSourceDics.Count == 0) {
                 imgSourceDics = new List<CommonDictionary>();
-                imgSourceDics.Add(new CommonDictionary() { Source = new Uri("pack://application:,,,/Haley.WPF.Resources;component/Dictionaries/haleyIconsCommon.xaml", UriKind.RelativeOrAbsolute) });
+                imgSourceDics.Add(new CommonDictionary() { Source = new Uri("pack://application:,,,/Haley.WPF.Resources;component/Dictionaries/haleyIconsPack.xaml", UriKind.RelativeOrAbsolute) });
             }
 
             if (svgDics == null || svgDics.Count == 0) {
 
                 svgDics = new List<CommonDictionary>();
-                svgDics.Add(new CommonDictionary() { Source = new Uri("pack://application:,,,/Haley.WPF.Resources;component/Dictionaries/haleySvgBranded.xaml", UriKind.RelativeOrAbsolute) });
+                svgDics.Add(new CommonDictionary() { Source = new Uri("pack://application:,,,/Haley.WPF.Resources;component/Dictionaries/haleySvgPack.xaml", UriKind.RelativeOrAbsolute) });
             }
 
             ImageSource result = null;
 
             //Try icons first, and then SVGS
             if (type == IconTargetType.Any) {
-               result = GetIcon(imgSourceDics, resourceKey);
-                if (result == null) result = GetIcon(svgDics, resourceKey);
+               result = GetIconInternal(imgSourceDics, resourceKey);
+                if (result == null) result = GetIconInternal(svgDics, resourceKey);
             }
 
             //Svgs
             if (type == IconTargetType.Svg) {
-                result = GetIcon(svgDics, resourceKey);
+                result = GetIconInternal(svgDics, resourceKey);
             }
 
             //Imgs
             if (type == IconTargetType.Image) {
-                result = GetIcon(imgSourceDics, resourceKey);
+                result = GetIconInternal(imgSourceDics, resourceKey);
             }
             return result;
         }
 
-        static ImageSource GetIcon(List<CommonDictionary> dicSource,object key) {
+        static ImageSource GetIconInternal(List<CommonDictionary> dicSource,object key) {
+            ImageSource result = null;
             foreach (var dic in dicSource) {
                 if (dic.Contains(key)) {
-                    return dic[key] as ImageSource; //Sometimes imagesource could be null, if we try to return a different object.
+                    result = dic[key] as ImageSource; //Sometimes imagesource could be null, if we try to return a different object.
+                    if (result != null) return result; //else continue to other dictionaries
                 }
             }
-            return null;
+            return result;
+        }
+
+        static ImageSource GetIconInternal(ResourceDictionary dic,object key) {
+            ImageSource result = null;
+            if (dic.Contains(key)) {
+                result = dic[key] as ImageSource; //Sometimes imagesource could be null, if we try to return a different object.
+            }
+
+            if (result == null && dic.MergedDictionaries?.Count() > 0) {
+                //try merged dictionaries.
+                foreach (var m_dic in dic.MergedDictionaries) {
+                    result = GetIconInternal(m_dic, key);
+                    if (result != null) return result;
+                }
+            }
+            return result;
         }
     }
 
