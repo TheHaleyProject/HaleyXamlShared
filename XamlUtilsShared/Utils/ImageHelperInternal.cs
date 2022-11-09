@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace Haley.Utils
 {
-    internal static class ImageHelper {
+    internal static class ImageHelperInternal {
         //private static ConcurrentDictionary<ImageRequest, ImageSource> ImageCacheSource = new ConcurrentDictionary<ImageRequest, ImageSource>();
 
         /// <summary>

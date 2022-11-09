@@ -11,10 +11,12 @@ using Haley.Models;
 using System.Windows.Media.Imaging;
 using Haley.Enums;
 using System.Windows.Media;
-#if __MVVM_FM
-using Internal.Haley.MVVM;
-#elif HWPFR
-using Internal.Haley.WPFResources;
+using Haley.Utils;
+
+#if HWPFR
+using Shared.Haley.WpfIconPack;
+#elif HMVVM
+using Shared.Haley.MVVM;
 #endif
 
 //STRIDE: The stride is the width of a single row of pixels (a scan line), rounded up to a four-byte boundary. If the stride is positive, the bitmap is top-down. If the stride is negative, the bitmap is bottom-up.
@@ -132,7 +134,7 @@ namespace Haley.Utils
                     result = ChangeImageColor(imageinfo, int.Parse(newcolor.R.ToString()), int.Parse(newcolor.G.ToString()), int.Parse(newcolor.B.ToString()));
                 } else if (source is DrawingImage dwgImage) {
                     //Handle drawing image differently
-                    return ChangeImageColor(dwgImage, brush);
+                    return ChangeDrawingColor(dwgImage, brush);
                 }
                 return result;
             }
@@ -142,7 +144,7 @@ namespace Haley.Utils
             }
         }
 
-        public static ImageSource ChangeImageColor(DrawingImage source, System.Windows.Media.Brush brush) {
+        public static ImageSource ChangeDrawingColor(DrawingImage source, System.Windows.Media.Brush brush) {
             if (source == null) return source;
             //We return a new image source.
             DrawingImage target = source.Clone(); //Always clone the source, or else we will end up changing the value of the source directly and when we try to change hover, we will change both the colors
@@ -150,19 +152,26 @@ namespace Haley.Utils
                 //if we have already cloned, this step might not be required.
                 target = source.Clone();
             }
-            if (target.Drawing is DrawingGroup dgroup) {
-                foreach (var child in dgroup.Children) {
-                    if (child is GeometryDrawing geo_dwg) {
 
-                        if (geo_dwg.Brush != null && geo_dwg.Brush.IsFrozen) {
-                            geo_dwg.Brush = geo_dwg.Brush.Clone();
-                        }
-
-                        geo_dwg.SetCurrentValue(GeometryDrawing.BrushProperty, brush);
-                    }
-                }
-            }
+            //A drawing image may directly contain geometry drawing or can contain any level of drawing groups
+            ChangeGeomColor(target.Drawing, brush); //recursive change
             return target;
+        }
+
+
+        static void ChangeGeomColor(Drawing drawing, System.Windows.Media.Brush brush) {
+
+            if (drawing is DrawingGroup dgroup) {
+                foreach (var child in dgroup.Children) {
+                    ChangeGeomColor(child, brush);
+                }
+            } else if (drawing is GeometryDrawing dwg_geom) {
+                if (dwg_geom.Brush != null && dwg_geom.Brush.IsFrozen) {
+                    dwg_geom.Brush = dwg_geom.Brush.Clone();
+                }
+
+                dwg_geom.SetCurrentValue(GeometryDrawing.BrushProperty, brush);
+            }
         }
 
 #endregion

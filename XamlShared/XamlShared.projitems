@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommonDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ResourceFetcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ResourceHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\VisualUtilsInternal.cs" />
   </ItemGroup>

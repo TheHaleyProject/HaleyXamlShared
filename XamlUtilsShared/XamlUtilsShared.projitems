@@ -13,7 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\RGB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HelperUtilsInternal.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\ImageHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ImageHelperInternal.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ImageUtilsInternal.cs" />
   </ItemGroup>
   <ItemGroup>

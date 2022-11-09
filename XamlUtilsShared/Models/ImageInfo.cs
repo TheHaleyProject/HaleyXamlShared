@@ -4,13 +4,13 @@ using System.Text;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 
-#if __MVVM_FM
-namespace Internal.Haley.MVVM
+#if HMVVM
+namespace Shared.Haley.MVVM {
 #elif HWPFR
-namespace Internal.Haley.WPFResources
+namespace Shared.Haley.WpfIconPack {
 #endif
-{
-    public class ImageInfo
+
+public class ImageInfo
     {
         public BitmapSource source { get; set; }
         public int pixel_width { get; set; }
@@ -23,4 +23,7 @@ namespace Internal.Haley.WPFResources
         public BitmapMetadata metadata { get; set; }
         public ImageInfo() { }
     }
+
+#if HMVVM || HWPFR
 }
+#endif
