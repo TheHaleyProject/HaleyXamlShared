@@ -40,13 +40,13 @@ namespace Haley.Utils {
 
             if (imgSourceDics == null || imgSourceDics.Count == 0) {
                 imgSourceDics = new List<CommonDictionary>();
-                imgSourceDics.Add(new CommonDictionary() { Source = new Uri("pack://application:,,,/Haley.WPF.Resources;component/Dictionaries/haleyIconsPack.xaml", UriKind.RelativeOrAbsolute) });
+                imgSourceDics.Add(new CommonDictionary() { Source = new Uri("pack://application:,,,/Haley.WPF.IconsPack;component/Dictionaries/haleyIconsPack.xaml", UriKind.RelativeOrAbsolute) });
             }
 
             if (svgDics == null || svgDics.Count == 0) {
 
                 svgDics = new List<CommonDictionary>();
-                svgDics.Add(new CommonDictionary() { Source = new Uri("pack://application:,,,/Haley.WPF.Resources;component/Dictionaries/haleySvgPack.xaml", UriKind.RelativeOrAbsolute) });
+                svgDics.Add(new CommonDictionary() { Source = new Uri("pack://application:,,,/Haley.WPF.IconsPack;component/Dictionaries/haleySvgPack.xaml", UriKind.RelativeOrAbsolute) });
             }
 
             ImageSource result = null;

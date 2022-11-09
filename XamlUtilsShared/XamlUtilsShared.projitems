@@ -9,9 +9,14 @@
     <Import_RootNamespace>XamlUtilsShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ImageInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RGB.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ImageRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\RGB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\HelperUtilsInternal.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ImageHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ImageUtilsInternal.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Enums\" />
   </ItemGroup>
 </Project>
