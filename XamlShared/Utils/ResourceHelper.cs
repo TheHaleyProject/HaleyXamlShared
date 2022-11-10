@@ -8,7 +8,7 @@
 //using System.Resources;
 
 //namespace Haley.Utils {
-//    internal static class ResourceHelper {
+//    internal static class IconFinder {
 //        public static CornerRadius cornerRadius = new CornerRadius(0.0);
 //        public static Thickness borderThickness = new Thickness(1);
 

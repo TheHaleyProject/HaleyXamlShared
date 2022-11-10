@@ -7,8 +7,9 @@ using System.Diagnostics;
 using System.Resources;
 using System.Collections.Concurrent;
 using Haley.Models;
+
 #if HWPFR
-using Shared.Haley.WpfIconPack;
+using Isolated.Haley.WpfIconPack;
 #endif
 
 namespace Haley.Utils {

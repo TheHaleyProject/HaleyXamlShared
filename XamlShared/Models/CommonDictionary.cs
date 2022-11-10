@@ -7,7 +7,7 @@ using System.Windows.Input;
 #if HWPF
 namespace Haley.Models
 #elif HWPFR
-namespace Shared.Haley.WpfIconPack
+namespace Isolated.Haley.WpfIconPack
 #endif
 {
     //Reason why we have it here separately is that Haley.MVVM doesn't have any reference to Haley.WPF.IconsPack but common dictionary is also needed in Haley.WPF.IconsPack.
