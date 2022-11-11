@@ -15,6 +15,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using dwg = System.Drawing;
+using System.Windows.Markup;
 
 namespace Haley.Utils
 {
@@ -40,5 +41,17 @@ namespace Haley.Utils
                 return input;
             }
         }
+
+        public static bool GetTargetElement(IServiceProvider serviceProvider, out DependencyElement target) {
+            target = null;
+            try {
+                var targetProvider = (IProvideValueTarget)serviceProvider.GetService(typeof(IProvideValueTarget));
+                target = new DependencyElement() { TargetObject = targetProvider.TargetObject as FrameworkElement, TargetProperty = targetProvider.TargetProperty as DependencyProperty };
+                return true;
+            } catch (Exception) {
+                return false;
+            }
+        }
+
     }
 }

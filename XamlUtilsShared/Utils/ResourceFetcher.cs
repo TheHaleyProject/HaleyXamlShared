@@ -12,14 +12,20 @@ using Haley.Models;
 using Isolated.Haley.WpfIconPack;
 #endif
 
+#if HMVVM
 namespace Haley.Utils {
-    //Since this is internal static, each assembly will retain their own static dictionary which will not be shared/accessed-by other assemblies
-    internal static class ResourceFetcher {
+#elif HWPFR
+namespace Isolated.Haley.WpfIconPack {
+#endif
 
-        private static ConcurrentDictionary<Enum, CommonDictionary> _dicSource = new ConcurrentDictionary<Enum, CommonDictionary>();
+    //Since this is internal static, each assembly will retain their own static dictionary which will not be shared/accessed-by other assemblies
+    public static class ResourceFetcher {
+
+        static ConcurrentDictionary<Enum, CommonDictionary> _dicSource = new ConcurrentDictionary<Enum, CommonDictionary>();
+        static List<Uri> _paths = new List<Uri>();
 
         //public static bool TryAddSource<T>(Uri dictionary_path) where T: Enum{
-        public static bool AddSource(Enum source, Uri dictionary_path){
+        public static bool AddSource(Enum source, Uri dictionary_path) {
             if (_dicSource.ContainsKey(source)) return false;
             if (dictionary_path == null) return false;
 
@@ -27,18 +33,28 @@ namespace Haley.Utils {
             var dic = new CommonDictionary();
             dic.Source = dictionary_path;
 
-            return _dicSource.TryAdd(source, dic);
+            bool result = _dicSource.TryAdd(source, dic);
+
+            if (result) {
+                _paths.Add(dictionary_path);
+            }
+
+            return result;
         }
 
-        public static bool RemoveSource(Enum source)  {
+        public static bool RemoveSource(Enum source) {
             try {
-                return _dicSource.TryRemove(source, out _);
+                bool result = _dicSource.TryRemove(source, out var removed);
+                if (result) {
+                    _paths.RemoveAll(p => p.ToString().ToLower().Equals(removed.Source?.ToString().ToLower()));
+                }
+                return result;
             } catch (Exception) {
                 return false;
             }
         }
 
-        public static object GetResource(Enum source,object resource_key) {
+        public static object GetResource(Enum source, object resource_key) {
             if (!_dicSource.ContainsKey(source)) return null; //Source key itself not found.
             _dicSource.TryGetValue(source, out var dic);
 
@@ -48,16 +64,16 @@ namespace Haley.Utils {
             return null;
         }
 
-        public static T GetResource<T>(Enum source, object resource_key)  where T:class {
+        public static T GetResource<T>(Enum source, object resource_key) where T : class {
 
-            return GetResource(source,resource_key) as T;
+            return GetResource(source, resource_key) as T;
         }
 
         public static object GetResourceAny(object resource_key) {
             object result = null;
             //Loop through all resources and their children
             foreach (var dic in _dicSource.Values) {
-                result = GetResourceAny(dic,resource_key);
+                result = GetResourceAny(dic, resource_key);
                 if (result != null) return result;
             }
             return result;
@@ -67,10 +83,10 @@ namespace Haley.Utils {
             return GetResourceAny(resource_key) as T;
         }
 
-        static object GetResourceAny(ResourceDictionary dic,object key) {
+        static object GetResourceAny(ResourceDictionary dic, object key) {
             object result = null;
             if (dic.Contains(key)) {
-                result = dic[key]; 
+                result = dic[key];
             }
 
             if (result == null && dic.MergedDictionaries?.Count() > 0) {
@@ -82,5 +98,12 @@ namespace Haley.Utils {
             }
             return result;
         }
+
+        public static List<Uri> GetAllSourcePaths() {
+            return _paths.ToList();
+        }
     }
+
+#if HMVVM || HWPFR
 }
+#endif

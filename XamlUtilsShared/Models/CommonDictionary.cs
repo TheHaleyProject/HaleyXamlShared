@@ -4,15 +4,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
-#if HWPF
-namespace Haley.Models
+#if HMVVM
+namespace Haley.Models{
 #elif HWPFR
-namespace Isolated.Haley.WpfIconPack
+namespace Isolated.Haley.WpfIconPack {
 #endif
-{
-    //Reason why we have it here separately is that Haley.MVVM doesn't have any reference to Haley.WPF.IconsPack but common dictionary is also needed in Haley.WPF.IconsPack.
-    //We do not need to maintain another separate nuget package for the utils that are shared between WPF/MVVM/Resources
-    //We need only to share a portion of the code between the two
+
+//Reason why we have it here separately is that Haley.MVVM doesn't have any reference to Haley.WPF.IconsPack but common dictionary is also needed in Haley.WPF.IconsPack.
+//We do not need to maintain another separate nuget package for the utils that are shared between WPF/MVVM/Resources
+//We need only to share a portion of the code between the two
     public class CommonDictionary : ResourceDictionary
     {
         public CommonDictionary() { }//need a new constructor
@@ -62,5 +62,7 @@ namespace Isolated.Haley.WpfIconPack
             }
         }
 
-    }
 }
+#if HMVVM || HWPFR
+}
+#endif
