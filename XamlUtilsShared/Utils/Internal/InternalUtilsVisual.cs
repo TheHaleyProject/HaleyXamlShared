@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace Haley.Utils
 {
-    internal static class VisualUtilsInternal
+    internal static class InternalUtilsVisual
     {
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject obj) where T : DependencyObject
         {

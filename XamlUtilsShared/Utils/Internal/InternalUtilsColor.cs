@@ -36,7 +36,7 @@ using Isolated.Haley.MVVM;
 
 namespace Haley.Utils
 {
-    internal class ImageUtilsInternal
+    internal class InternalUtilsColor
     {
 
 #region ColorChanger
@@ -93,9 +93,9 @@ namespace Haley.Utils
             try
             {
                 //Ensure that the color values are with in the allowed range.
-                HelperUtilsInternal.ClampLimits(ref red);
-                HelperUtilsInternal.ClampLimits(ref green);
-                HelperUtilsInternal.ClampLimits(ref blue);
+                InternalUtilsCommon.ClampLimits(ref red);
+                InternalUtilsCommon.ClampLimits(ref green);
+                InternalUtilsCommon.ClampLimits(ref blue);
 
                 //Now using the imageinfo source, create a new array and fill it with the input color.
                 byte[] newimage = new byte[source.length];

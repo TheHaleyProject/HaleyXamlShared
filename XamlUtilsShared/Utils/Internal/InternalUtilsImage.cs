@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace Haley.Utils
 {
-    internal static class ImageHelperInternal {
+    internal static class InternalUtilsImage {
         //private static ConcurrentDictionary<ImageRequest, ImageSource> ImageCacheSource = new ConcurrentDictionary<ImageRequest, ImageSource>();
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Haley.Utils
             //    result = ImageUtils.changeImageColor(source, brush);
             //    ImageCacheSource.TryAdd(_request, result);
             //}
-            return ImageUtilsInternal.ChangeImageColor(source, brush);
+            return InternalUtilsColor.ChangeImageColor(source, brush);
         }
     }
 }

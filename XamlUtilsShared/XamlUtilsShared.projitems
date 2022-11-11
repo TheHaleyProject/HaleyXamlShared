@@ -14,11 +14,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\RGB.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HelperUtilsInternal.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\ImageHelperInternal.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\ImageUtilsInternal.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Internal\InternalUtilsCommon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Internal\InternalUtilsImage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Internal\InternalUtilsColor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\ResourceFetcher.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\VisualUtilsInternal.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Internal\InternalUtilsVisual.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Enums\" />
