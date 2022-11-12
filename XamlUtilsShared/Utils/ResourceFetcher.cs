@@ -9,13 +9,13 @@ using System.Collections.Concurrent;
 using Haley.Models;
 
 #if HWPFR
-using Isolated.Haley.WpfIconPack;
+using Haley.IconsPack.Models;
 #endif
 
 #if HMVVM
 namespace Haley.Utils {
 #elif HWPFR
-namespace Isolated.Haley.WpfIconPack {
+namespace Haley.IconsPack.Models {
 #endif
 
     //Since this is internal static, each assembly will retain their own static dictionary which will not be shared/accessed-by other assemblies

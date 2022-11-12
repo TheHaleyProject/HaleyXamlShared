@@ -19,6 +19,13 @@ using System.Windows.Markup;
 using System.ComponentModel;
 using System.Reflection;
 
+#if HWPFR
+using Haley.IconsPack.Models;
+using Haley.IconsPack.Abstractions;
+#elif HMVVM
+using Haley.Abstractions;
+#endif
+
 namespace Haley.Utils
 {
     internal sealed class InternalUtilsCommon {
@@ -57,8 +64,16 @@ namespace Haley.Utils
             }
         }
 
-        public static object FetchValueAndMonitor(object sourceObject, string prop_name,PropertyChangedEventHandler PropChangeHandler) {
+        private static void SetupPropertyMonitor(object sourceObject, PropertyChangedEventHandler PropChangeHandler) {
+            Type targetType = sourceObject?.GetType();
+            if (typeof(INotifyPropertyChanged).IsAssignableFrom(targetType)) {
+                //Subscribe to this property change also
+                (sourceObject as INotifyPropertyChanged).PropertyChanged -= PropChangeHandler;
+                (sourceObject as INotifyPropertyChanged).PropertyChanged += PropChangeHandler;
+            }
+        }
 
+        public static void FetchValueAndMonitor(object sourceObject, string prop_name,PropertyChangedEventHandler PropChangeHandler,IIconSourceProvider sourceProvider) {
             //A property name can be direct or it can be a class name with dot notation.
             object prop_value = null;
             try {
@@ -73,23 +88,38 @@ namespace Haley.Utils
                 }
 
                 PropertyInfo tarProp = targetType.GetProperty(path);
+                if (tarProp == null) {
+                    //Property itself is not available, no point in checking further.}
+                    sourceProvider.OnDataChanged(null); //this will send the default image.
+                }
                 prop_value = tarProp?.GetValue(sourceObject);
 
-                if (prop_value == null) return null; //Because either we have some object or we are not able to find that property name itself.
-
-                if (!string.IsNullOrWhiteSpace(sub_path)) {
-                    prop_value = FetchValueAndMonitor(prop_value, sub_path, PropChangeHandler);
+                if (string.IsNullOrWhiteSpace(sub_path)) {
+                    //THIS IS THE END.
+                    //We are at the target property. Setup the final monitor
+                    SetupPropertyMonitor(sourceObject, PropChangeHandler); //Which will eventually trigger further new changes.
+                    sourceProvider.OnDataChanged(prop_value); //Trigger directly.
                 } else {
-                    //The final property's holding class should be implementing INotifyPropertyChanged.
+                    //If subpath is not null, we should also setup a prop change monitor (even if propvalue is not null). So that in future if the value changes, we can reapply the values.
                     if (typeof(INotifyPropertyChanged).IsAssignableFrom(targetType)) {
+                        PropertyChangedEventHandler inline_handler = (sender, e) => {
+                            //We can directly fetch the method values.
+                            //This could be for any property change. Ensure we are at correct place.
+                            if (e.PropertyName != path) return; //ignore don't try to change the image.
+                            var updated_value = sender.GetType().GetProperty(path)?.GetValue(sender);
+                            if (updated_value == null) sourceProvider.OnDataChanged(null);
+                            FetchValueAndMonitor(updated_value, sub_path, PropChangeHandler, sourceProvider); //Now prop is ready, continue the probe.
+                        };
+
                         //Subscribe to this property change also
-                        (sourceObject as INotifyPropertyChanged).PropertyChanged -= PropChangeHandler;
-                        (sourceObject as INotifyPropertyChanged).PropertyChanged += PropChangeHandler;
+                        (sourceObject as INotifyPropertyChanged).PropertyChanged -= inline_handler;
+                        (sourceObject as INotifyPropertyChanged).PropertyChanged += inline_handler;
+                    }
+                    if (prop_value != null) {
+                       FetchValueAndMonitor(prop_value, sub_path, PropChangeHandler, sourceProvider); //Loop further and when we reach the end where there are no more subpaths, we  will trigger the datachange direclty (for first time).
                     }
                 }
-                return prop_value;
             } catch (Exception) {
-                return prop_value;
             }
         }
     }

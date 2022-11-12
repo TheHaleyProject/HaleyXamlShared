@@ -5,9 +5,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 
 #if HMVVM
-namespace Isolated.Haley.MVVM {
+namespace Haley.Models {
 #elif HWPFR
-namespace Isolated.Haley.WpfIconPack {
+namespace Haley.IconsPack.Models {
 #endif
 
 public class ImageInfo

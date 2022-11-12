@@ -9,6 +9,7 @@
     <Import_RootNamespace>XamlUtilsShared</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Abstractions\IIconSourceProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\CommonDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DependencyElement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ImageInfo.cs" />

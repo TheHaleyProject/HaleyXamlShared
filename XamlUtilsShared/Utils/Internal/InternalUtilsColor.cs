@@ -14,9 +14,7 @@ using System.Windows.Media;
 using Haley.Utils;
 
 #if HWPFR
-using Isolated.Haley.WpfIconPack;
-#elif HMVVM
-using Isolated.Haley.MVVM;
+using Haley.IconsPack.Models;
 #endif
 
 //STRIDE: The stride is the width of a single row of pixels (a scan line), rounded up to a four-byte boundary. If the stride is positive, the bitmap is top-down. If the stride is negative, the bitmap is bottom-up.
@@ -152,13 +150,10 @@ namespace Haley.Utils
                 //if we have already cloned, this step might not be required.
                 target = source.Clone();
             }
-
             //A drawing image may directly contain geometry drawing or can contain any level of drawing groups
             ChangeGeomColor(target.Drawing, brush); //recursive change
             return target;
         }
-
-
         static void ChangeGeomColor(Drawing drawing, System.Windows.Media.Brush brush) {
 
             if (drawing is DrawingGroup dgroup) {
