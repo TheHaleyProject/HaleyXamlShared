@@ -87,7 +87,7 @@ namespace Haley.Utils
                     sub_path = string.Join(".", splitted.Skip(1).ToArray());
                 }
 
-                PropertyInfo tarProp = targetType.GetProperty(path);
+                PropertyInfo tarProp = targetType?.GetProperty(path);
                 if (tarProp == null) {
                     //Property itself is not available, no point in checking further.}
                     sourceProvider.OnDataChanged(null); //this will send the default image.
